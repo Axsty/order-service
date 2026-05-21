@@ -22,7 +22,7 @@ public class Order {
 
     private String customerName;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private List<OrderItem> orderItems;
 
