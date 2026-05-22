@@ -1,8 +1,6 @@
 package se.iths.axel.orderservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import se.iths.axel.orderservice.client.ProductClient;
 import se.iths.axel.orderservice.dto.CreateOrderRequest;
@@ -28,7 +26,7 @@ public class OrderService {
     private final ProductClient client;
 
     /*CREATE ORDER*/
-    public OrderResponse createOrder(CreateOrderRequest request, @AuthenticationPrincipal Jwt jwt) {
+    public OrderResponse createOrder(CreateOrderRequest request, String username) {
         List<ProductStockRequest> stockRequest = request.orderItems()
                 .stream()
                 .map(item -> new ProductStockRequest(item.productId(), item.quantity()))
@@ -43,13 +41,13 @@ public class OrderService {
             OrderItem orderItem = new OrderItem();
             orderItem.setName(info.name());
             orderItem.setPrice(info.price());
-            orderItem.setQuantity(info.stock());
+            orderItem.setQuantity(info.quantity());
             itemList.add(orderItem);
         }
 
         Order order = new Order();
         order.setOrderDate(LocalDate.now());
-        order.setCustomerName(jwt.getSubject());
+        order.setCustomerName(username);
         order.setOrderItems(itemList);
         order.setTotalPrice(totalPriceCalculation(itemList));
 
@@ -63,8 +61,8 @@ public class OrderService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (OrderItem orderItem : itemList) {
-            totalPrice = totalPrice.add(orderItem.getPrice())
-                    .multiply(new BigDecimal(orderItem.getQuantity()));
+            totalPrice = totalPrice.add(orderItem.getPrice()
+                    .multiply(new BigDecimal(orderItem.getQuantity())));
         }
 
         return totalPrice;
