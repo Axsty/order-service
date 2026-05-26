@@ -15,9 +15,10 @@ public class ProductClient {
 
     private final RestClient restClient;
 
-    public List<ProductInfo> decreaseStock(List<ProductStockRequest> items) {
+    public List<ProductInfo> decreaseStock(List<ProductStockRequest> items, String bearerToken) {
         return restClient.post()
                 .uri("/products/stock/decrease")
+                .header("Authorization", bearerToken)
                 .body(items)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {

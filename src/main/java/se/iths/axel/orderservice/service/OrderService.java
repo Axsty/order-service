@@ -32,7 +32,7 @@ public class OrderService {
                 .map(item -> new ProductStockRequest(item.productId(), item.quantity()))
                 .toList();
 
-        List<ProductInfo> productInfo = client.decreaseStock(stockRequest);
+        List<ProductInfo> productInfo = client.decreaseStock(stockRequest, username);
 
         List<OrderItem> itemList = new ArrayList<>();
 
