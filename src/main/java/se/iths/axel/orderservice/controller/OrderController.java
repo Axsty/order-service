@@ -24,6 +24,8 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Void> createOrder(@RequestBody CreateOrderRequest request, @AuthenticationPrincipal Jwt jwt) {
+        String bearerToken = "Bearer: " + jwt.getTokenValue();
+
         OrderResponse response = service.createOrder(request, jwt.getSubject());
         publisher.sendOrderConfirmation(response);
         return ResponseEntity.status(HttpStatus.CREATED).build();
