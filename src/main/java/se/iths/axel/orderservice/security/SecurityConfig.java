@@ -3,6 +3,7 @@ package se.iths.axel.orderservice.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,6 +42,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Lazy
     public JwtDecoder jwtDecoder(@Value("${auth-service.url}") String authServerUrl) {
         NimbusJwtDecoder decoder = NimbusJwtDecoder
                 .withJwkSetUri(authServerUrl + "/auth/jwks")
