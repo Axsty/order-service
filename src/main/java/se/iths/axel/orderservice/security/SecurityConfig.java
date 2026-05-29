@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .withJwkSetUri(authServerUrl + "/auth/jwks")
                 .build();
 
-        decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(authServerUrl));
+        decoder.setJwtValidator(JwtValidators.createDefault());
 
         return decoder;
     }
