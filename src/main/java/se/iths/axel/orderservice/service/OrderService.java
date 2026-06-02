@@ -55,8 +55,15 @@ public class OrderService {
         order.setTotalPrice(totalPriceCalculation(itemList));
 
         repository.save(order);
-        
-        return mapper.toOrderResponse(order);
+
+        OrderResponse response = new OrderResponse(
+                order.getId(),
+                order.getCustomerName(),
+                productInfo,
+                order.getTotalPrice()
+        );
+
+        return response;
     }
 
     public BigDecimal totalPriceCalculation(List<OrderItem> itemList) {
