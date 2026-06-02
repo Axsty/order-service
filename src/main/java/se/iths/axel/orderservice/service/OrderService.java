@@ -34,6 +34,10 @@ public class OrderService {
 
         List<ProductInfo> productInfo = client.decreaseStock(stockRequest, bearerToken);
 
+        Order order = new Order();
+        order.setOrderDate(LocalDate.now());
+        order.setCustomerName(username);
+
         List<OrderItem> itemList = new ArrayList<>();
 
         for (ProductInfo info : productInfo) {
@@ -42,18 +46,16 @@ public class OrderService {
             orderItem.setName(info.name());
             orderItem.setPrice(info.price());
             orderItem.setQuantity(info.quantity());
+            orderItem.setOrder(order);
+
             itemList.add(orderItem);
         }
 
-        Order order = new Order();
-        order.setOrderDate(LocalDate.now());
-        order.setCustomerName(username);
         order.setOrderItems(itemList);
         order.setTotalPrice(totalPriceCalculation(itemList));
 
         repository.save(order);
-
-
+        
         return mapper.toOrderResponse(order);
     }
 
