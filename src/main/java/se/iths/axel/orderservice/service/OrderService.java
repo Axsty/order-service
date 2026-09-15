@@ -2,12 +2,12 @@ package se.iths.axel.orderservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.iths.axel.orderservice.client.ProductClient;
 import se.iths.axel.orderservice.dto.CreateOrderRequest;
 import se.iths.axel.orderservice.dto.OrderResponse;
 import se.iths.axel.orderservice.dto.ProductInfo;
 import se.iths.axel.orderservice.dto.ProductStockRequest;
-import se.iths.axel.orderservice.mapper.OrderMapper;
 import se.iths.axel.orderservice.model.Order;
 import se.iths.axel.orderservice.model.OrderItem;
 import se.iths.axel.orderservice.repository.OrderRepository;
@@ -22,10 +22,9 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository repository;
-    private final OrderMapper mapper;
     private final ProductClient client;
 
-    /*CREATE ORDER*/
+    @Transactional
     public OrderResponse createOrder(CreateOrderRequest request, String username, String bearerToken) {
         List<ProductStockRequest> stockRequest = request.orderItems()
                 .stream()
@@ -56,14 +55,11 @@ public class OrderService {
 
         repository.save(order);
 
-        OrderResponse response = new OrderResponse(
+        return new OrderResponse(
                 order.getId(),
                 order.getCustomerName(),
                 productInfo,
-                order.getTotalPrice()
-        );
-
-        return response;
+                order.getTotalPrice());
     }
 
     public BigDecimal totalPriceCalculation(List<OrderItem> itemList) {
