@@ -17,6 +17,13 @@ public class ProductClient {
 
     private final RestClient restClient;
 
+    /**
+     * Minskar lagersaldot i product-service för de produkter som klienten vill ha.
+     *
+     * @param items       Produkter och antal som ska minskas
+     * @param bearerToken Användarens token
+     * @return id, namn på produkt, beskrivning, antal, pris hämtat från product-service
+     */
     public List<ProductInfo> decreaseStock(List<ProductStockRequest> items, String bearerToken) {
         try {
             return restClient.post()

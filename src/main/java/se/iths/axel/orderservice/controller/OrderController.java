@@ -22,6 +22,13 @@ public class OrderController {
     private final OrderPublisher publisher;
     private final OrderService service;
 
+    /**
+     * Skapar en order för den inloggade användaren och skickar en orderbekräftelse till email-service.
+     *
+     * @param request Produkter x antal
+     * @param jwt     Token som skickas vidare till product-service
+     * @return 201 Created med den skapade ordern
+     */
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest request, @AuthenticationPrincipal Jwt jwt) {
         String bearerToken = "Bearer " + jwt.getTokenValue();

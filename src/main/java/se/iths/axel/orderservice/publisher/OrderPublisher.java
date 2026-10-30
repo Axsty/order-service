@@ -12,6 +12,11 @@ public class OrderPublisher {
 
     private final RabbitTemplate template;
 
+    /**
+     * Skickar en orderbekräftelse till en RabbitMQ kö där email-service plockar upp den.
+     *
+     * @param response Ordern
+     */
     public void sendOrderConfirmation(OrderResponse response) {
         template.convertAndSend(RabbitConfig.QUEUE, response);
         System.out.println("Order confirmation sent: " + response.id());

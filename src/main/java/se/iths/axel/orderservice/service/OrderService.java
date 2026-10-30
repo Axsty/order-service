@@ -24,6 +24,14 @@ public class OrderService {
     private final OrderRepository repository;
     private final ProductClient client;
 
+    /**
+     * Skapar order. Minskar lagersaldot i product-service.
+     *
+     * @param request     Produkt och antal
+     * @param username    Inloggad användares email
+     * @param bearerToken JWT som skickas vidare till product-service
+     * @return Den sparade ordern (order id, användare som lagt ordern, info om produkter och totalpris)
+     */
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request, String username, String bearerToken) {
         List<ProductStockRequest> stockRequest = request.orderItems()
@@ -62,6 +70,12 @@ public class OrderService {
                 order.getTotalPrice());
     }
 
+    /**
+     * Summerar pris x antal för varje orderrad.
+     *
+     * @param itemList Lista med orderItems
+     * @return Totalpriset för alla orderItems i listan
+     */
     public BigDecimal totalPriceCalculation(List<OrderItem> itemList) {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
